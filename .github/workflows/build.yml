@@ -1,0 +1,18 @@
+name: Build AAB
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: unzip -o "*.zip" -d. || true
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - run: chmod +x gradlew || true
+      - run: ./gradlew bundleRelease
+      - uses: actions/upload-artifact@v4
+        with:
+          name: apexbet-aab
+          path: app/build/outputs/bundle/release/*.aab
